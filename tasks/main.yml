@@ -7,8 +7,6 @@
   when: ssh_keys is undefined and password is undefined
   run_once: true
 
-- name: Create netplan file
-  
 - name: register netplan to variable
   set_fact: 
     netplan: "{{ lookup('template', 'netplan-static-ip.yaml.j2') }}"
