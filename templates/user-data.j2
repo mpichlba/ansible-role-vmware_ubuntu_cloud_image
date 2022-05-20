@@ -15,3 +15,5 @@ write_files:
   - encoding: base64
     content: {{ netplan }}
     path: /etc/netplan/50-cloud-init.yaml
+runcmd:
+  - netplan apply
