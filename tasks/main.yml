@@ -11,6 +11,10 @@
   set_fact: 
     netplan: "{{ lookup('template', 'netplan-static-ip.yaml.j2') }}"
 
+- name: show you netplan file
+  set_fact:
+    msg: "{{ netplan }}"
+
 - name: deploy OVA file
   tags: deploy-ova
   vmware_deploy_ovf:
