@@ -10,6 +10,7 @@
 - name: register netplan to variable
   set_fact: 
     netplan: "{{ lookup('template', 'netplan-static-ip.yaml.j2') }}"
+  register: netplan
 
 - name: show you netplan file
   set_fact:
