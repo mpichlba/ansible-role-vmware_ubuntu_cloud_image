@@ -7,6 +7,12 @@
   when: ssh_keys is undefined and password is undefined
   run_once: true
 
+- name: Create netplan file
+  
+- name: register netplan to variable
+  set_fact: 
+    netplan: "{{ lookup('template', 'netplan-static-ip.yaml.j2') }}"
+
 - name: deploy OVA file
   tags: deploy-ova
   vmware_deploy_ovf:
@@ -78,15 +84,19 @@
   delegate_to: localhost
   register: vm_facts
 
-- name: use current IP address (from vm facts)
-  set_fact:
-    ansible_ssh_host: "{{ vm_facts.instance.ipv4 }}"
+- name: show VM Infos
+  debug:
+    msg: "{{ vm_facts }}"
 
-- name: apply static IP configuration
-  include: configure-network.yml
-  when: static_ip is defined
+#- name: use current IP address (from vm facts)
+#  set_fact:
+#    ansible_ssh_host: "{{ vm_facts.instance.ipv4 }}"
 
-- name: gather host facts
-  setup:
+#- name: apply static IP configuration
+#  include: configure-network.yml
+#  when: static_ip is defined
+
+#- name: gather host facts
+#  setup:
 
 # vim: ts=2:sw=2:noautoindent:nosmartindent
