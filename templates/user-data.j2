@@ -13,7 +13,8 @@ ssh_authorized_keys:
 {% endif %}
 write_files:
   - encoding: base64
-    content: {{ netplan }}
+    content: |
+      {{ netplan }}
     path: /etc/netplan/50-cloud-init.yaml
 runcmd:
-  - netplan apply
+  - sudo netplan apply
