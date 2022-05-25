@@ -12,8 +12,7 @@ ssh_authorized_keys:
 {% endfor %}
 {% endif %}
 write_files:
-  - encoding: base64
-    content: |
+  - content: |
       network:
         version: 2
         ethernets:
@@ -34,5 +33,8 @@ write_files:
                 - {{ server }}
 {% endfor %}
     path: /etc/netplan/50-cloud-init.yaml
+  - content: |
+      network: {config: disabled}  
+    path: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
 runcmd:
   - sudo netplan apply
