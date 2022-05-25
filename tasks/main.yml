@@ -98,8 +98,6 @@
 - name: use static IP address
   set_fact:
     ansible_ssh_host: "{{ static_ipv4 }}"
-  changed_when: vm_facts.instance.ipv4 != static_ipv4
-  when: netplan_template is changed
 
 - meta: reset_connection
 
