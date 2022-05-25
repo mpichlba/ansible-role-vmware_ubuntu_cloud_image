@@ -84,6 +84,7 @@
     validate_certs: "{{ vcenter_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
     name: "{{ vm_guestname }}"
+    wait_for_ip_address: yes
   delegate_to: localhost
   register: vm_facts
 
@@ -91,15 +92,24 @@
   debug:
     msg: "{{ vm_facts }}"
 
-#- name: use current IP address (from vm facts)
-#  set_fact:
-#    ansible_ssh_host: "{{ vm_facts.instance.ipv4 }}"
+- name: use current IP address (from vm facts)
+  set_fact:
+    ansible_ssh_host: "{{ vm_facts.instance.ipv4 }}"
 
-#- name: apply static IP configuration
-#  include: configure-network.yml
-#  when: static_ip is defined
+- name: use static IP address
+  set_fact:
+    ansible_ssh_host: "{{ static_ipv4 }}"
+  changed_when: vm_facts.instance.ipv4 != static_ipv4
+  when: netplan_template is changed
 
-#- name: gather host facts
-#  setup:
+- meta: reset_connection
+
+- name: ensure IP address is reachable
+  wait_for_connection:
+    connect_timeout: 3
+    timeout: 30
+
+- name: gather host facts
+  setup:
 
 # vim: ts=2:sw=2:noautoindent:nosmartindent
