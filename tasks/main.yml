@@ -103,8 +103,8 @@
 
 - name: ensure IP address is reachable
   wait_for_connection:
-    connect_timeout: 3
-    timeout: 30
+    connect_timeout: 10
+    timeout: 60
 
 - name: gather host facts
   setup:
